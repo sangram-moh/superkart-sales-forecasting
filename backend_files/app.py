@@ -4,6 +4,8 @@ from flask import Flask, request, jsonify
 
 # Initialize the Flask app
 superkart_api = Flask("SuperKart Sales Forecaster")
+# Keeping JSON keys in row order (As Flask sorts keys alphabetically by default)
+superkart_api.json.sort_keys = False
 
 # Load the serialized pipeline (preprocessing + tuned Random Forest)
 model = joblib.load("superkart_model.joblib")

@@ -28,7 +28,7 @@ PRODUCT_TYPES = sorted([
 ])
 
 st.set_page_config(page_title="SuperKart Sales Forecaster", page_icon="🛒")
-st.title("🛒 SuperKart Sales Forecaster")
+st.title("SuperKart Sales Forecaster")
 st.write("Predict the total sales revenue of a product in a SuperKart store.")
 
 online_tab, batch_tab = st.tabs(["Single prediction", "Batch prediction"])
@@ -83,7 +83,8 @@ with batch_tab:
                                      files={"file": uploaded_file.getvalue()}, timeout=120)
             response.raise_for_status()
             results = pd.read_csv(io.BytesIO(uploaded_file.getvalue()))
-            results["Predicted_Sales"] = list(response.json().values())
+            predictions = response.json()
+            results["Predicted_Sales"] = [predictions[str(i)] for i in results.index]  # match by row index
             st.success(f"Predicted sales for {len(results)} products "
                        f"(total: {results['Predicted_Sales'].sum():,.2f})")
             st.dataframe(results)
